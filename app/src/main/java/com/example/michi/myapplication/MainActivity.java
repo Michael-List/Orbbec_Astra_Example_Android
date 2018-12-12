@@ -1,7 +1,5 @@
 package com.example.michi.myapplication;
 
-import android.content.Intent;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +7,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.orbbec.astra.Astra;
-import com.orbbec.astra.BodyStream;
-import com.orbbec.astra.DepthStream;
-import com.orbbec.astra.ImageStream;
-import com.orbbec.astra.ImageStreamMode;
 import com.orbbec.astra.PointFrame;
 import com.orbbec.astra.PointStream;
 import com.orbbec.astra.ReaderFrame;
@@ -20,13 +14,8 @@ import com.orbbec.astra.StreamReader;
 import com.orbbec.astra.StreamSet;
 import com.orbbec.astra.Vector3D;
 import com.orbbec.astra.android.AstraAndroidContext;
-import com.orbbec.astra.android.AstraDeviceManager;
-import com.orbbec.astra.android.AstraDeviceMonitorActivity;
-import com.orbbec.astra.android.unity3d.AstraUnityPlayerActivity;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
