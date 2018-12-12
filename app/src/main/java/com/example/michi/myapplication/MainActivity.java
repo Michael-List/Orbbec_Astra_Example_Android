@@ -25,6 +25,7 @@ import com.orbbec.astra.android.AstraDeviceMonitorActivity;
 import com.orbbec.astra.android.unity3d.AstraUnityPlayerActivity;
 
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -32,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private Executor ex;
-    private final String device_URI = "D16111910441";
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 aac.initialize();
                 aac.openAllDevices();
 
-                TimeUnit.SECONDS.sleep(5);
                 Log.e("STREAM", "open stream");
                 StreamSet streamSet = StreamSet.open();
                 StreamReader reader = streamSet.createReader();
@@ -91,15 +90,17 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onFrameReady(StreamReader reader, ReaderFrame frame) {
                         PointFrame df = PointFrame.get(frame);
-                        ByteBuffer buffer = df.getByteBuffer();
-                        if (df.isValid()) {
-                            Log.e("ASTRA", "frame is valid");
+                        FloatBuffer buffer = df.getPointBuffer();
+                        Log.e("FRAME", "height: " + df.getHeight());
+                        Log.e("FRAME", "width: " + df.getWidth());
 
+                        if (df.isValid()) {
+                            Log.e("FRAME", "frame is valid");
                             while (buffer.hasRemaining()) {
                                 vector3DList.add(new Vector3D(
-                                        buffer.getFloat(),
-                                        buffer.getFloat(),
-                                        buffer.getFloat() * -1));
+                                        buffer.get(),
+                                        buffer.get(),
+                                        buffer.get() * -1));
                             }
                             frameFinished = true;
                         }
@@ -114,16 +115,18 @@ public class MainActivity extends AppCompatActivity {
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
 
+                pointStream.stop();
+                streamSet.close();
             } catch (Throwable e) {
                 Log.e("ASTRA", e.toString());
             } finally {
                 aac.terminate();
             }
 
-            Log.e("DATAAAA", "x: " + this.vector3DList.get(200).getX());
-            Log.e("DATAAAA", "y: " + this.vector3DList.get(200).getY());
-            Log.e("DATAAAA", "z: " + this.vector3DList.get(200).getZ());
-            Log.e("DATAAAA", "size of list: " + this.vector3DList.size());
+            Log.e("DATA", "x: " + this.vector3DList.get(200).getX());
+            Log.e("DATA", "y: " + this.vector3DList.get(200).getY());
+            Log.e("DATA", "z: " + this.vector3DList.get(200).getZ());
+            Log.e("DATA", "size of list: " + this.vector3DList.size());
         }
     }
 }
